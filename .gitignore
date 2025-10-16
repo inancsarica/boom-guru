@@ -10,7 +10,6 @@ dist/
 build/
 venv/
 .env
-.env.*
 
 # 🧪 Logs & Temporary Files
 *.log
