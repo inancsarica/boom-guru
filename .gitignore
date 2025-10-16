@@ -30,7 +30,6 @@ ehthumbs.db
 
 # ⚙️ Test & Backup Scripts
 main_old.py
-main_test.py
 main_test.log
 
 # 🧩 Service & Deployment
