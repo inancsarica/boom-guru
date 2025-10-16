@@ -254,7 +254,7 @@ async def process_image(session_id: str, request: ImageRequest):
             category = "working_machine" # Default to working_machine
 
         final_answer = ""
-        part_category: str = ""
+        part_categories: List[str] = []
 
         if category == "other":
             final_answer = "Yüklenen görsel bir iş makinesi veya hata kodu olarak tanımlanamadı. Lütfen bir makine ya da hata ekranı içeren alakalı bir görsel yükleyin."
@@ -350,24 +350,47 @@ async def process_image(session_id: str, request: ImageRequest):
                 json_str = part_response_text.replace("```json", '').replace("```", '').strip()
                 part_data = json.loads(json_str)
                 part_category = part_data.get("part_category") or ""
-                if part_category and part_category not in VALID_PART_CATEGORIES:
+                raw_part_categories = part_data.get("part_categories", [])
+                if isinstance(raw_part_categories, str):
+                    raw_part_categories = [raw_part_categories]
+                if not isinstance(raw_part_categories, list):
                     logging.warning(
-                        f"Invalid part category '{part_category}' for session_id={session_id}"
+                        f"Unexpected part_categories format for session_id={session_id}: {type(raw_part_categories)}"
                     )
-                    part_category = ""
-                elif part_category:
+                    raw_part_categories = []
+
+                validated_categories: List[str] = []
+                for item in raw_part_categories:
+                    if not isinstance(item, str):
+                        logging.warning(
+                            f"Discarding non-string part category '{item}' for session_id={session_id}"
+                        )
+                        continue
+                    normalized = item.strip()
+                    if not normalized:
+                        continue
+                    if normalized not in VALID_PART_CATEGORIES:
+                        logging.warning(
+                            f"Invalid part category '{normalized}' for session_id={session_id}"
+                        )
+                        continue
+                    if normalized not in validated_categories:
+                        validated_categories.append(normalized)
+
+                part_categories = validated_categories
+                if part_categories:
                     logging.info(
-                        f"Predicted part category: {part_category} for session_id={session_id}"
+                        f"Predicted part categories: {part_categories} for session_id={session_id}"
                     )
                 else:
                     logging.info(
-                        f"No part category predicted for session_id={session_id}"
+                        f"No part categories predicted for session_id={session_id}"
                     )
             except Exception as e:
                 logging.error(
                     f"Failed to determine part category for session_id={session_id}: {str(e)}"
                 )
-                part_category = ""
+                part_categories = []
 
         save_machine_analysis(
             session_id=session_id,
@@ -376,7 +399,7 @@ async def process_image(session_id: str, request: ImageRequest):
             form_id=request.form_id,
             question_id=request.question_id,
             category=category,
-            part_category=part_category,
+            part_category=", ".join(part_categories),
             final_answer=final_answer,
         )
 
@@ -390,6 +413,7 @@ async def process_image(session_id: str, request: ImageRequest):
             "answer": final_answer,
             "status": "done",
             "part_category": part_category,
+            "part_categories": part_categories,
         }
 
     except Exception as e:
@@ -405,7 +429,7 @@ async def process_image(session_id: str, request: ImageRequest):
             "question_id": request.question_id,
             "answer": str(e),
             "status": "failed",
-            "part_category": "",
+            "part_categories": [],
         }
 
     send_callback(callback_url, callback_payload, session_id)
