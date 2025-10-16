@@ -1,0 +1,44 @@
+# 🧠 Python & Virtual Environment
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+venv/
+.env
+.env.*
+
+# 🧪 Logs & Temporary Files
+*.log
+*.tmp
+*.swp
+*.swo
+*.bak
+
+# 🚀 Local Configuration
+.DS_Store
+.idea/
+.vscode/
+*.code-workspace
+
+# 🧰 OS files
+Thumbs.db
+ehthumbs.db
+
+# ⚙️ Test & Backup Scripts
+main_old.py
+main_test.py
+main_test.log
+
+# 🧩 Service & Deployment
+!boomguru.service.example
+
+# 📂 Runtime Files
+files/
+prompts/__pycache__/
+*.pid
+*.sock

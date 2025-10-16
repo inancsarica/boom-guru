@@ -1,0 +1,14 @@
+[Unit]
+Description=Boom Guru
+After=network.target
+
+[Service]
+User=bg-msarica
+WorkingDirectory=/path-to-your-project/boom_guru
+ExecStart=/path-to-your-project/boom_guru/venv/bin/uvicorn main:app --host 0.0.0.0 --port 8360
+Restart=always
+RestartSec=3
+Environment="PYTHONUNBUFFERED=1"
+
+[Install]
+WantedBy=multi-user.target
