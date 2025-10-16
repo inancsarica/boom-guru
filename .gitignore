@@ -38,7 +38,6 @@ main_test.log
 !boomguru.service.example
 
 # 📂 Runtime Files
-files/
 prompts/__pycache__/
 *.pid
 *.sock
