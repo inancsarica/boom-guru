@@ -7,6 +7,7 @@ from typing import Optional
 import pyodbc
 
 from .config import (
+    BOOMGURU_TARGET_TABLE,
     MSSQL_DATABASE,
     MSSQL_DRIVER,
     MSSQL_PASSWORD,
@@ -52,8 +53,8 @@ def save_machine_analysis(
         with get_db_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
-                """
-                INSERT INTO AIRPA.dbo.BOOM_GURU (
+                f"""
+                INSERT INTO {BOOMGURU_TARGET_TABLE} (
                     session_id,
                     serial_number,
                     image_id,

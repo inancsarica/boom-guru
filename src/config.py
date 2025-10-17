@@ -14,10 +14,11 @@ from openai import AzureOpenAI
 load_dotenv()
 
 # Configure application-wide logging once on import.
+LOG_FILE_NAME: Final[str] = os.getenv("BOOMGURU_LOG_FILE", "logs/main.log")
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
-    filename="main_test.log",
+    filename=LOG_FILE_NAME,
     filemode="a",
 )
 
@@ -50,6 +51,9 @@ MSSQL_DATABASE: Final[str | None] = os.getenv("MSSQL_DATABASE")
 MSSQL_USERNAME: Final[str | None] = os.getenv("MSSQL_USERNAME")
 MSSQL_PASSWORD: Final[str | None] = os.getenv("MSSQL_PASSWORD")
 MSSQL_DRIVER: Final[str] = os.getenv("MSSQL_DRIVER", "{ODBC Driver 17 for SQL Server}")
+BOOMGURU_TARGET_TABLE: Final[str] = os.getenv(
+    "BOOMGURU_TABLE", "AIRPA.dbo.BOOM_GURU"
+)
 
 # Part classifier settings
 PART_CLASSIFIER_ATTEMPTS: Final[int] = 3

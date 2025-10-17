@@ -9,6 +9,8 @@ ExecStart=/path-to-your-project/boom_guru/venv/bin/uvicorn main:app --host 0.0.0
 Restart=always
 RestartSec=3
 Environment="PYTHONUNBUFFERED=1"
+Environment="BOOMGURU_LOG_FILE=/path-to-your-project/boom_guru/logs/main.log"
+Environment="BOOMGURU_TABLE=AIRPA.dbo.BOOM_GURU"
 
 [Install]
 WantedBy=multi-user.target
