@@ -338,7 +338,7 @@ async def process_image(session_id: str, request: ImageRequest):
                             {
                                 "type": "text",
                                 "text": (
-                                    "Aşağıdaki analiz, görseldeki hata veya makine hakkında çıkarılan bilgileri içerir:\n"
+                                    "The following analysis captures the extracted findings about the machine or fault:\n"
                                     f"{final_answer}"
                                 ),
                             },
@@ -349,6 +349,7 @@ async def process_image(session_id: str, request: ImageRequest):
                 part_response_text = call_openai_api(part_messages, session_id)
                 json_str = part_response_text.replace("```json", '').replace("```", '').strip()
                 part_data = json.loads(json_str)
+                print(json_str)
                 part_category = part_data.get("part_category") or ""
                 raw_part_categories = part_data.get("part_categories", [])
                 if isinstance(raw_part_categories, str):
@@ -412,7 +413,6 @@ async def process_image(session_id: str, request: ImageRequest):
             "question_id": request.question_id,
             "answer": final_answer,
             "status": "done",
-            "part_category": part_category,
             "part_categories": part_categories,
         }
 
