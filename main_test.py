@@ -46,13 +46,29 @@ MSSQL_SERVER = os.getenv("MSSQL_SERVER")
 MSSQL_DATABASE = os.getenv("MSSQL_DATABASE")
 MSSQL_USERNAME = os.getenv("MSSQL_USERNAME")
 MSSQL_PASSWORD = os.getenv("MSSQL_PASSWORD")
-MSSQL_DRIVER = os.getenv("MSSQL_DRIVER", "{ODBC Driver 18 for SQL Server}")
+MSSQL_DRIVER = os.getenv("MSSQL_DRIVER", "{ODBC Driver 17 for SQL Server}")
+PART_CLASSIFIER_ATTEMPTS = 3
 VALID_PART_CATEGORIES = {
-    "MOTOR PARÇALARI",
+    "ATASMANLAR-DIGER",
+    "ATASMANLAR-KIRICI",
+    "ATASMANLAR-KOVA",
+    "AUTO GREASING SYS",
     "HIDROLIK PARÇALARI",
-    "CAT SPARE PARTS",
+    "HIDROLIK PARÇALARI - HORTUM / RAKOR",
+    "HIDROLIK PARÇALARI - SILINDIR",
+    "HIDROLIK SILINDIR",
+    "KOMPONENT REVIZYON",
+    "MOTOR PARÇALARI",
+    "REBUILD",
+    "ROP-ENGINE",
+    "ROP-PUMPS/MOTOR",
+    "GÜÇ AKTARMA PARÇALARI",
+    "ROP-TRANSMISSION",
     "ELEKTIRIK VE DIĞER PARÇALAR",
-    "SASE PARCALARI",
+    "ŞANZUMAN PARÇALARI",
+    "ŞASE PARÇALARI",
+    "MAKİNA PARÇALARI",
+    "CAT SPARE PARTS",
     "KORUYUCU BAKIM ÜRÜNLERI",
     "YÜRÜYÜŞ TAKIMI",
     "LASTIK",
@@ -328,57 +344,82 @@ async def process_image(session_id: str, request: ImageRequest):
             try:
                 with open("prompts/part_classifier.md", "r", encoding="utf-8") as f:
                     part_prompt = f.read()
+                
+                aggregated_categories: List[str] = []
+                for attempt in range(1, PART_CLASSIFIER_ATTEMPTS + 1):
+                    part_messages = [
+                        {"role": "system", "content": part_prompt},
+                        {
+                            "role": "user",
+                            "content": [
+                                {"type": "image_url", "image_url": {"url": image_base64_str}},
+                                {
+                                    "type": "text",
+                                    "text": (
+                                        "The following analysis captures the extracted findings about the machine or fault:\n"
+                                        f"{final_answer}"
+                                    ),
+                                },
+                            ],
+                        },
+                    ]
 
-                part_messages = [
-                    {"role": "system", "content": part_prompt},
-                    {
-                        "role": "user",
-                        "content": [
-                            {"type": "image_url", "image_url": {"url": image_base64_str}},
-                            {
-                                "type": "text",
-                                "text": (
-                                    "The following analysis captures the extracted findings about the machine or fault:\n"
-                                    f"{final_answer}"
-                                ),
-                            },
-                        ],
-                    },
-                ]
-
-                part_response_text = call_openai_api(part_messages, session_id)
-                json_str = part_response_text.replace("```json", '').replace("```", '').strip()
-                part_data = json.loads(json_str)
-                print(json_str)
-                part_category = part_data.get("part_category") or ""
-                raw_part_categories = part_data.get("part_categories", [])
-                if isinstance(raw_part_categories, str):
-                    raw_part_categories = [raw_part_categories]
-                if not isinstance(raw_part_categories, list):
-                    logging.warning(
-                        f"Unexpected part_categories format for session_id={session_id}: {type(raw_part_categories)}"
-                    )
-                    raw_part_categories = []
-
-                validated_categories: List[str] = []
-                for item in raw_part_categories:
-                    if not isinstance(item, str):
-                        logging.warning(
-                            f"Discarding non-string part category '{item}' for session_id={session_id}"
+                    try:
+                        part_response_text = call_openai_api(part_messages, session_id)
+                    except Exception as call_error:
+                        logging.error(
+                            "Part classifier API call failed on attempt %s for session_id=%s: %s",
+                            attempt,
+                            session_id,
+                            call_error,
                         )
                         continue
-                    normalized = item.strip()
-                    if not normalized:
-                        continue
-                    if normalized not in VALID_PART_CATEGORIES:
-                        logging.warning(
-                            f"Invalid part category '{normalized}' for session_id={session_id}"
+
+                    json_str = part_response_text.replace("```json", '').replace("```", '').strip()
+                    try:
+                        part_data = json.loads(json_str)
+                    except json.JSONDecodeError as decode_error:
+                        logging.error(
+                            "Failed to decode part classifier JSON on attempt %s for session_id=%s: %s\nResponse: %s",
+                            attempt,
+                            session_id,
+                            decode_error,
+                            json_str,
                         )
                         continue
-                    if normalized not in validated_categories:
-                        validated_categories.append(normalized)
+                    
+                    raw_part_categories = part_data.get("part_categories", [])
+                    if isinstance(raw_part_categories, str):
+                        raw_part_categories = [raw_part_categories]
+                    if not isinstance(raw_part_categories, list):
+                        logging.warning(
+                            f"Unexpected part_categories format for session_id={session_id}: {type(raw_part_categories)}"
+                        )
+                        continue
 
-                part_categories = validated_categories
+                    validated_categories: List[str] = []
+                    for item in raw_part_categories:
+                        if not isinstance(item, str):
+                            logging.warning(
+                                f"Discarding non-string part category '{item}' for session_id={session_id}"
+                            )
+                            continue
+                        normalized = item.strip()
+                        if not normalized:
+                            continue
+                        if normalized not in VALID_PART_CATEGORIES:
+                            logging.warning(
+                                f"Invalid part category '{normalized}' for session_id={session_id}"
+                            )
+                            continue
+                        if normalized not in validated_categories:
+                            validated_categories.append(normalized)
+
+                    for category_name in validated_categories:
+                        if category_name not in aggregated_categories:
+                            aggregated_categories.append(category_name)
+
+                part_categories = aggregated_categories
                 if part_categories:
                     logging.info(
                         f"Predicted part categories: {part_categories} for session_id={session_id}"
