@@ -9,7 +9,7 @@ Apply the following decision rules to ensure consistent, repeatable outcomes:
    - **AUTO GREASING SYS** – Centralized lubrication systems malfunction, leak, or fail to distribute grease.
    - **HIDROLIK PARÇALARI** – General hydraulic components (manifolds, valves, pumps) have leaks, pressure loss, or defects outside of hoses or cylinders.
    - **HIDROLIK PARÇALARI - HORTUM / RAKOR** – Hydraulic hoses or fittings are ruptured, leaking, or dangerously worn.
-   - **HIDROLIK PARÇALARI - SILINDIR** / **HIDROLIK SILINDIR** – Hydraulic cylinders have bent rods, leaking seals, or structural failure.
+   - **HIDROLIK PARÇALARI - SILINDIR** – Hydraulic cylinders have bent rods, leaking seals, or structural failure.
    - **KOMPONENT REVIZYON** – Major components require overhaul rather than simple part replacement.
    - **MOTOR PARÇALARI** – Engine components (injectors, turbo, cooling system) show faults requiring disassembly or replacement.
    - **REBUILD** – Evidence indicates the machine needs a complete rebuild to restore functionality.

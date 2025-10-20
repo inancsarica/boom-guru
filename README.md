@@ -9,6 +9,8 @@ BoomGuru analyzes **machine-related images using LLM** and returns possible **fa
 ```
 BOOM_GURU/
 ├── files/                  # Input/output or temporary files
+├── logs/                   # Buraya yaz
+├── src/                    # Buraya yaz
 ├── prompts/                # LLM prompt templates
 ├── venv/                   # Virtual environment (excluded from git)
 ├── .env                    # Local environment variables (excluded from git)
