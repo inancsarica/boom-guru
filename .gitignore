@@ -40,3 +40,6 @@ README.md.example
 prompts/__pycache__/
 *.pid
 *.sock
+
+src/config_old.py
+prompts/part_classifier_old.md
