@@ -45,6 +45,7 @@ def save_machine_analysis(
     image_id: str,
     form_id: Optional[str],
     question_id: Optional[str],
+    image_url: str,
     category: Optional[str],
     part_category: str,
     final_answer: str,
@@ -60,10 +61,11 @@ def save_machine_analysis(
                     image_id,
                     form_id,
                     question_id,
+                    image_url,
                     category,
                     part_category,
                     final_answer
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     session_id,
@@ -71,6 +73,7 @@ def save_machine_analysis(
                     image_id,
                     form_id,
                     question_id,
+                    image_url,
                     category,
                     part_category,
                     final_answer,

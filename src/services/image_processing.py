@@ -310,6 +310,7 @@ async def process_image(session_id: str, request: ImageRequest) -> None:
             image_id=request.image_id,
             form_id=request.form_id,
             question_id=request.question_id,
+            image_url=request.image_url,
             category=category,
             part_category=", ".join(part_categories),
             final_answer=final_answer,
