@@ -87,11 +87,73 @@ async def process_image(session_id: str, request: ImageRequest) -> None:
 
         final_answer = ""
         part_categories: List[str] = []
+        if category == "working_machine":
+            is_real_photo = True
+            try:
+                authenticity_prompt = (
+                    PROMPTS_DIR / "photo_authenticity.md"
+                ).read_text(encoding="utf-8")
+                authenticity_messages = [
+                    {"role": "system", "content": authenticity_prompt},
+                    {
+                        "role": "user",
+                        "content": [
+                            {"type": "image_url", "image_url": {"url": image_base64_str}},
+                        ],
+                    },
+                ]
+
+                authenticity_response_text = call_openai_api(
+                    authenticity_messages, session_id
+                )
+                json_str = (
+                    authenticity_response_text.replace("```json", "")
+                    .replace("```", "")
+                    .replace("\n", "")
+                    .strip()
+                )
+                authenticity_data = json.loads(json_str)
+                is_real_value = authenticity_data.get("is_real_photo", True)
+                if isinstance(is_real_value, bool):
+                    is_real_photo = is_real_value
+                elif isinstance(is_real_value, str):
+                    is_real_photo = is_real_value.strip().lower() in {
+                        "true",
+                        "yes",
+                        "1",
+                    }
+                elif isinstance(is_real_value, (int, float)):
+                    is_real_photo = bool(is_real_value)
+                logging.info(
+                    "Image authenticity check for session_id=%s returned %s",
+                    session_id,
+                    is_real_photo,
+                )
+            except json.JSONDecodeError as exc:
+                logging.error(
+                    "Failed to decode authenticity JSON for session_id=%s: %s",
+                    session_id,
+                    exc,
+                )
+            except Exception as exc:  # pylint: disable=broad-except
+                logging.error(
+                    "Authenticity check failed for session_id=%s: %s",
+                    session_id,
+                    exc,
+                )
+                is_real_photo = True
+
+            if not is_real_photo:
+                logging.info(
+                    "Image marked as non-real machine photo for session_id=%s", session_id
+                )
+                category = "other"
 
         if category == "other":
             final_answer = (
-                "Yüklenen görsel bir iş makinesi veya hata kodu olarak tanımlanamadı. "
-                "Lütfen bir makine ya da hata ekranı içeren alakalı bir görsel yükleyin."
+                "Yüklenen görsel bir iş makinesi veya hata kodu olarak tanımlanamadı ya da "
+                "gerçek bir fotoğraf içermiyor (ör. dijital render, çizim). Lütfen gerçek bir "
+                "makine ya da hata ekranı fotoğrafı içeren alakalı bir görsel yükleyin."
             )
 
         elif category == "error_code":
@@ -310,6 +372,7 @@ async def process_image(session_id: str, request: ImageRequest) -> None:
             image_id=request.image_id,
             form_id=request.form_id,
             question_id=request.question_id,
+            webhook_url=request.webhook_url,
             image_url=request.image_url,
             category=category,
             part_category=", ".join(part_categories),

@@ -56,7 +56,7 @@ BOOMGURU_TARGET_TABLE: Final[str] = os.getenv(
 )
 
 # Part classifier settings
-PART_CLASSIFIER_ATTEMPTS: Final[int] = 3
+PART_CLASSIFIER_ATTEMPTS: Final[int] = 2
 VALID_PART_CATEGORIES: Final[set[str]] = {
     "ATASMANLAR-DIGER",
     "ATASMANLAR-KIRICI",
