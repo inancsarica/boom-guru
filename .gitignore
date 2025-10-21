@@ -43,3 +43,4 @@ prompts/__pycache__/
 
 src/config_old.py
 prompts/part_classifier_old.md
+tests/logs/boom_guru_test_responses.json
