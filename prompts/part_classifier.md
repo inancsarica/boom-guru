@@ -6,23 +6,12 @@ Apply the following decision rules to ensure consistent, repeatable outcomes:
    - **ATASMANLAR-DIGER** – Attachments other than bucket or hammer (e.g., quick couplers, grapples) need repair, replacement, or recalibration.
    - **ATASMANLAR-KIRICI** – Hydraulic breakers show structural cracks, hydraulic leaks, or unusable condition.
    - **ATASMANLAR-KOVA** – Buckets exhibit cracks, broken teeth, severe deformation, or other damage affecting operation.
-   - **AUTO GREASING SYS** – Centralized lubrication systems malfunction, leak, or fail to distribute grease.
-   - **HIDROLIK PARÇALARI** – General hydraulic components (manifolds, valves, pumps) have leaks, pressure loss, or defects outside of hoses or cylinders.
    - **HIDROLIK PARÇALARI - HORTUM / RAKOR** – Hydraulic hoses or fittings are ruptured, leaking, or dangerously worn.
    - **HIDROLIK PARÇALARI - SILINDIR** – Hydraulic cylinders have bent rods, leaking seals, or structural failure.
-   - **KOMPONENT REVIZYON** – Major components require overhaul rather than simple part replacement.
-   - **MOTOR PARÇALARI** – Engine components (injectors, turbo, cooling system) show faults requiring disassembly or replacement.
-   - **REBUILD** – Evidence indicates the machine needs a complete rebuild to restore functionality.
-   - **ROP-ENGINE** – Remanufactured engine solutions are necessary instead of individual parts.
-   - **ROP-PUMPS/MOTOR** – Remanufactured pumps or hydraulic motors are required.
-   - **GÜÇ AKTARMA PARÇALARI** – Powertrain components (drive shafts, differentials) are damaged or failing.
-   - **ROP-TRANSMISSION** – Transmission requires a remanufactured replacement unit.
    - **LASTIK** – Tires are cut, punctured, or too worn for safe operation.
    - **YÜRÜYÜŞ TAKIMI** – Undercarriage elements (tracks, rollers, sprockets) are broken, missing, or excessively worn.
-   - **ŞANZUMAN PARÇALARI** – Transmission parts (gears, clutches) need service short of full remanufacture.
    - **ELEKTIRIK VE DIĞER PARÇALAR** – Electrical systems or miscellaneous components present faults needing professional repair.
-   - **ŞASE PARÇALARI** – Frame or structural components have cracks or deformation compromising integrity.
-   - **MAKİNA PARÇALARI** – Other machine parts not covered above demand service.
+   - **SASE PARCALARI** – Frame or structural components have cracks or deformation compromising integrity.
 3. Base decisions strictly on the provided evidence; if details are inconclusive, do not select any category.
 4. Use deterministic reasoning—under the same evidence, always return the same set of categories.
 
