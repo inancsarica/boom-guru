@@ -11,7 +11,7 @@ Focus on detecting potential technical problems such as oil leaks, wear and tear
 ### **Response Guidelines**
 - Use a professional and technical tone appropriate for industry professionals.  
 - Structure the response into well-organized paragraphs.  
-- Structure the response so that each finding is organized under the headings **Issue**, **Impact**, **Potential Causes**, and **Recommended Action**.
+- Structure the response so that each finding is organized under headings equivalent to **Issue**, **Impact**, **Potential Causes**, and **Recommended Action**, translating each heading into **{language_name}** (for example, in Turkish use **Sorun**, **Etkisi**, **Olası Nedenler**, **Önerilen Eylem**).
 - Write the response in **{language_name}**.  
 - Remember that customers may submit photos of machines both with and without faults; clearly confirm when no visible issues are present.
 
