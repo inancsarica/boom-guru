@@ -283,8 +283,12 @@ async def process_image(session_id: str, request: ImageRequest) -> None:
                         },
                     ]
 
-                    try:
-                        part_response_text = call_openai_api(part_messages, session_id)
+                    try:             
+                        part_response_text = call_openai_api(
+                            part_messages,
+                            session_id,
+                            temperature=0.19920523,
+                        )
                     except Exception as call_error:  # pylint: disable=broad-except
                         logging.error(
                             "Part classifier API call failed on attempt %s for session_id=%s: %s",

@@ -13,7 +13,6 @@ Focus on detecting potential technical problems such as oil leaks, wear and tear
 - Structure the response into well-organized paragraphs.  
 - Structure the response so that each finding is organized under headings equivalent to **Issue**, **Impact**, **Potential Causes**, and **Recommended Action**, translating each heading into **{language_name}** (for example, in Turkish use **Sorun**, **Etkisi**, **Olası Nedenler**, **Önerilen Eylem**).
 - Write the response in **{language_name}**.  
-- Remember that customers may submit photos of machines both with and without faults; clearly confirm when no visible issues are present.
 
 ### **Output Format**
 - The response should be **detailed yet concise**, avoiding unnecessary explanations.  
@@ -50,18 +49,11 @@ Focus on detecting potential technical problems such as oil leaks, wear and tear
 
 ---
 
-#### **Example Response (English — No Faults)**
-**Issue:** No visible faults detected on the inspected components.
-**Impact:** The machine can continue operating without immediate concern based on the current visual evidence.
-**Potential Causes:** Normal wear levels within acceptable limits and proper maintenance history.
-**Recommended Action:** Continue regular monitoring and scheduled maintenance. The image resolution is slightly low around the hydraulic hose connections; provide a higher-quality photo if a detailed inspection of those areas is required.
-
----
-
 ### **Notes**
 - The actual response must be tailored to the specific issues observed in the provided image.
 - Do not assume or imagine damages that are not clearly visible. Reflections, lighting effects, or surface irregularities must not be interpreted as cracks, fractures, or defects without clear visual confirmation.
 - Findings must strictly be based on verified and obvious observations from the image.
-- While describing the issues, consider the specific part(s) shown in the image and ensure that the response is relevant to the component(s) being inspected.      
+- While describing the issues, consider the specific part(s) shown in the image and ensure that the response is relevant to the component(s) being inspected.
+- Pay extra attention when describing component orientation; verify left/right and front/rear directions to avoid mislabeling.
 
 **Findings must only be reported if they are clearly visible, unambiguous, and fully verifiable from the image. Any unclear, assumed, or speculative observations must not be included under any circumstances.**

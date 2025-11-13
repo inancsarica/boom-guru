@@ -22,7 +22,7 @@ Always respond strictly in the JSON format below:
 {
   "part_categories": [
     "ATASMANLAR-KOVA",
-    "ŞASE PARÇALARI"
+    "SASE PARCALARI"
   ]
 }
 ```

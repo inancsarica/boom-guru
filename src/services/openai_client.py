@@ -10,14 +10,19 @@ import requests
 from ..config import client
 
 
-def call_openai_api(messages: List[Dict[str, Any]], session_id: str) -> str:
+def call_openai_api(
+    messages: List[Dict[str, Any]],
+    session_id: str,
+    temperature: float = 0.5,
+    top_p: float = 1,
+) -> str:
     """Calls the OpenAI API with the given messages and handles the response."""
     try:
         response = client.chat.completions.create(
             model="gpt-4o",
             messages=messages,
-            temperature=0.5,
-            top_p=1,
+            temperature=temperature,
+            top_p=top_p,
         )
         logging.info("OpenAI API call successful for session_id=%s", session_id)
         return response.choices[0].message.content
