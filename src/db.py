@@ -50,6 +50,7 @@ def save_machine_analysis(
     category: Optional[str],
     part_category: str,
     final_answer: str,
+    language: str,
 ) -> None:
     try:
         with get_db_connection() as conn:
@@ -66,8 +67,9 @@ def save_machine_analysis(
                     image_url,
                     category,
                     part_category,
-                    final_answer
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    final_answer,
+                    language
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     session_id,
@@ -80,6 +82,7 @@ def save_machine_analysis(
                     category,
                     part_category,
                     final_answer,
+                    language,
                 ),
             )
             conn.commit()

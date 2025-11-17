@@ -381,6 +381,7 @@ async def process_image(session_id: str, request: ImageRequest) -> None:
             category=category,
             part_category=", ".join(part_categories),
             final_answer=final_answer,
+            language=request.language,
         )
 
         callback_payload = {

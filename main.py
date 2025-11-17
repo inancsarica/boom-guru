@@ -17,13 +17,14 @@ async def describe_image(request: ImageRequest, background_tasks: BackgroundTask
 
     logging.info(
         "Received image description request: session_id=%s, image_id=%s, serial_number=%s, "
-        "form_id=%s, question_id=%s, image_url=%s",
+        "form_id=%s, question_id=%s, image_url=%s, language=%s",
         session_id,
         request.image_id,
         request.serial_number,
         request.form_id,
         request.question_id,
         request.image_url,
+        request.language,
     )
 
     return {
